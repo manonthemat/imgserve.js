@@ -42,9 +42,7 @@ function sendText(recipient, message, mediaUrl) {
   twilio_client.sendMessage({
     to: recipient,
     from: twilio_config.number,
-    body: "Grab your photo now, before it's gone: " + mediaUrl
-    //body: message,
-    //mediaUrl: mediaUrl
+    body: message + mediaUrl
   }, function(err, data) {
     if(err) console.log(err);
     if(data) console.log(data);
@@ -67,7 +65,7 @@ io.on('connection', function(socket) {
         var aws_url = "http://s3-" + aws_config.region + ".amazonaws.com/" + aws_config.bucket + "/upload/" + data.filename;
         console.log(aws_url);
         sendText(twilio_config.default_recipient,
-                 "Your love life will be... interesting.",
+                 "Grab your photo now, before it's gone: ",
                  aws_url
         );
       }
