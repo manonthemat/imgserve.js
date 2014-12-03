@@ -22,6 +22,10 @@ function handler(req, resp) {
 
 io.on('connection', function(socket) {
   console.log('new connection established');
+  socket.on('share image', function(data) {
+    console.log('a user wants to share an image');
+    console.log(data);
+  });
 });
 
 fs.watch(__dirname + '/images/', function(event, name) {

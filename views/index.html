@@ -13,9 +13,13 @@
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
   <script>
     var socket = io('http://localhost:3000');
+
+    function share(name) {
+      socket.emit('share image', {filename: name});
+    }
+
     socket.on('file changed', function(data) {
-      console.log(data);
-      $('#images').append("<img src='images/" + data.filename + "' alt='" + data.filename + "' />");
+      $('#images').append("<img onclick='share(\"" + data.filename + "\")' src='images/" + data.filename + "' alt='" + data.filename + "' />");
     });
   </script>
 </html>
