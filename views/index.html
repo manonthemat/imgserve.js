@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>imgserve.js</title>
+  </head>
+  <body>
+    <h1>imgserve.js</h1>
+    <main>
+      <section id="images"></section>
+    </main>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script>
+    var socket = io('http://localhost:3000');
+    socket.on('file changed', function(data) {
+      console.log(data);
+      $('#images').append("<img src='images/" + data.filename + "' alt='" + data.filename + "' />");
+    });
+  </script>
+</html>
