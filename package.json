@@ -1,8 +1,9 @@
 {
   "name": "imgserve.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a image server/client application using sockets",
   "dependencies": {
-    "socket.io": "^1.2.1"
+    "socket.io": "^1.2.1",
+    "twilio": "^1.9.0"
   }
 }
