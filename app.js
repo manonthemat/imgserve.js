@@ -38,11 +38,13 @@ function handler(req, resp) {
 
 }
 
-function sendText(recipient, message) {
+function sendText(recipient, message, mediaUrl) {
   twilio_client.sendMessage({
     to: recipient,
     from: twilio_config.number,
-    body: message
+    body: "Grab your photo now, before it's gone: " + mediaUrl
+    //body: message,
+    //mediaUrl: mediaUrl
   }, function(err, data) {
     if(err) console.log(err);
     if(data) console.log(data);
@@ -54,8 +56,22 @@ io.on('connection', function(socket) {
   socket.on('share image', function(data) {
     console.log('a user wants to share an image');
     console.log(data);
-    pushToBucket({Key: data.filename, Body: data.filename});
-    sendText(twilio_config.default_recipient, "Your love life will be... interesting.");
+    fs.readFile(__dirname + '/images/' + data.filename, function(err, file) {
+      if(err) console.log('error reading file: ' + data.filename);
+      else {
+        pushToBucket({
+          Key: 'upload/' + data.filename,
+          Body: file,
+          ACL: 'public-read'
+        });
+        var aws_url = "http://s3-" + aws_config.region + ".amazonaws.com/" + aws_config.bucket + "/upload/" + data.filename;
+        console.log(aws_url);
+        sendText(twilio_config.default_recipient,
+                 "Your love life will be... interesting.",
+                 aws_url
+        );
+      }
+    });
   });
 });
 
