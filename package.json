@@ -1,9 +1,10 @@
 {
   "name": "imgserve.js",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "a image server/client application using sockets",
   "dependencies": {
     "aws-sdk": "^2.0.29",
+    "express": "^4.10.4",
     "socket.io": "^1.2.1",
     "twilio": "^1.9.0"
   }

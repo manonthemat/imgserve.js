@@ -1,5 +1,7 @@
-var app = require('http').createServer(handler);
-var io = require('socket.io')(app);
+var express = require('express');
+var app = express();
+app.set('port', process.env.PORT || 8000);
+var io = require('socket.io')(require('http').Server(app));
 var fs = require('fs');
 var env = process.env.NODE_ENV || 'development';
 var aws_config = require(__dirname + '/config/aws.js')[env];
@@ -18,20 +20,6 @@ function pushToBucket(data) {
     if(err) console.log("An error occured while trying to push to S3 bucket\n", err);
     else console.log("push to s3 successful");
   });
-}
-
-function handler(req, resp) {
-  var url;
-  url = req.url;
-  fs.readFile(__dirname + url, function(err, data) {
-    if(err) {
-      resp.writeHead(500);
-      return resp.end("An error occured, please contact your systems administrator.");
-    }
-    resp.writeHead(200);
-    resp.end(data);
-  });
-
 }
 
 function sendText(recipient, message, mediaUrl) {
@@ -89,4 +77,13 @@ function broadcast_change(name) {
   io.emit('file changed', { filename: name });
 }
 
-app.listen(3000);
+app.get('/', function(req, resp) {
+  resp.sendFile(__dirname + '/views/index.html');
+});
+app.use(express.static('views'));
+app.use('/images', express.static('images'));
+app.use('/bower_components', express.static('bower_components'));
+app.listen(app.get('port'), function() {
+  console.log("Express server listening on port " + app.get('port'));
+});
+io.listen(3000);
