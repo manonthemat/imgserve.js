@@ -34,11 +34,15 @@ function sendText(recipient, message, mediaUrl) {
   });
 }
 
-function mailPhoto(data) {
+function mailPhoto(data, recipient) {
   console.log('a user is sending a photo via email');
   console.log('data.filename in mailPhoto: ' + data.filename);
   var email = new sendgrid.Email();
-  email.addTo("matthias@virsix.com");
+  if(!recipient) {
+    console.error("no recipient passed. mailing photo to matthias@virsix.com");
+    recipient = "matthias@virsix.com";
+  }
+  email.addTo(recipient);
   email.setFrom(sendgrid_config.from);
   email.setSubject(sendgrid_config.subject);
   email.setText(sendgrid_config.text);
