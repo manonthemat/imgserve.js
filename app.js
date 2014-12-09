@@ -22,18 +22,6 @@ function pushToBucket(data) {
 
 function handler(req, resp) {
   var url;
-/*  if(req.url.split('/')[1] == 'images') {
-    url = req.url;
-  } else if ((req.url.split('/')[1] == 'components')
-      || (req.url.split('/')[2] == 'components')
-      || (req.url.split('/')[1] == 'bower_components')
-      || (req.url.split('/')[2] == 'bower_components'))
-  {
-    url = req.url;
-  } else {
-    url = '/views/index.html';
-  }
-  */
   url = req.url;
   fs.readFile(__dirname + url, function(err, data) {
     if(err) {
