@@ -18,7 +18,7 @@ var sendgrid = require('sendgrid')(sendgrid_config.user, sendgrid_config.passwor
 
 function pushToBucket(data) {
   s3bucket.putObject(data, function(err, data) {
-    if(err) console.log("An error occured while trying to push to S3 bucket\n", err);
+    if(err) console.error("An error occured while trying to push to S3 bucket\n", err);
     else console.log("push to s3 successful");
   });
 }
@@ -29,13 +29,14 @@ function sendText(recipient, message, mediaUrl) {
     from: twilio_config.number,
     body: message + mediaUrl
   }, function(err, data) {
-    if(err) console.log(err);
+    if(err) console.error(err);
     if(data) console.log(data);
   });
 }
 
 function mailPhoto(data) {
-  console.log('a user is sendin a photo via email');
+  console.log('a user is sending a photo via email');
+  console.log('data.filename in mailPhoto: ' + data.filename);
   var email = new sendgrid.Email();
   email.addTo("matthias@virsix.com");
   email.setFrom(sendgrid_config.from);
@@ -46,34 +47,21 @@ function mailPhoto(data) {
     path: data.filename
   });
   sendgrid.send(email, function(err, json) {
-    if (err) return console.log(err);
+    if (err) return console.error(err);
     console.log(json);
   });
 }
 
+function composeS3Url(local_filename) {
+  return "http://s3-" + aws_config.region + ".amazonaws.com/" + aws_config.bucket + "/upload/" + local_filename;
+}
+
 function textPhoto(data) {
   console.log('a user is sending a photo via text message');
-  console.log(data);
-  if(!(data.filename.split(":").length > 1)) { // if filename does not contain a protocol "http://domain.com/file.jpg"
-    fs.readFile(__dirname + '/' + data.filename, function(err, file) {
-      if(err) console.log('error reading file: ' + data.filename);
-      else {
-        pushToBucket({
-          Key: 'upload/' + data.filename,
-          Body: file,
-          ACL: 'public-read'
-        });
-        var aws_url = "http://s3-" + aws_config.region + ".amazonaws.com/" + aws_config.bucket + "/upload/" + data.filename;
-        console.log(aws_url);
-        sendText(twilio_config.default_recipient,
-                "Grab your photo now, before it's gone: ",
-                aws_url
-        );
-      }
-    });
-  } else {
-    console.log("Error: Not a local file. Aborting...");
-  }
+  sendText(twilio_config.default_recipient,
+          "Grab your photo now, before it's gone: ",
+          composeS3Url(data.filename)
+  );
 }
 
 io.on('connection', function(socket) {
@@ -88,6 +76,16 @@ fs.watch(__dirname + '/images/', function(event, name) {
   if (name) {
   // TODO: uncomment next line on linux machine and delete the line above
   //if (event == "change" && name) {
+    fs.readFile(__dirname + '/images/' + name, function(err, file) {
+      if(err) console.error('error reading file: ' + name + '\n' + err);
+      else {
+        pushToBucket({
+          Key: 'upload/images/' + name,
+          Body: file,
+          ACL: 'public-read'
+        });
+      }
+    });
     broadcast_change(name);
   }
 });
