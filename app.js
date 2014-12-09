@@ -40,10 +40,10 @@ function mailPhoto(data) {
   var email = new sendgrid.Email();
   email.addTo("matthias@virsix.com");
   email.setFrom(sendgrid_config.from);
-  email.setSubject("A mail from sendgrid");
-  email.setText("Look at you!\nYou got hoops!");
+  email.setSubject(sendgrid_config.subject);
+  email.setText(sendgrid_config.text);
   email.addFile({
-    filename: "slamdunk.jpg",
+    filename: sendgrid_config.filename,
     path: data.filename
   });
   sendgrid.send(email, function(err, json) {

@@ -2,12 +2,18 @@ var sendgrid_config = {
   development: {
     user: "",
     password: "",
-    from: ""
+    from: "",
+    subject: "",
+    text: "",
+    filename: ""
   },
   production: {
     user: "",
     password: "",
-    from: ""
+    from: "",
+    subject: "",
+    text: "",
+    filename: ""
   }
 };
 
