@@ -18,7 +18,7 @@
         </paper-shadow>
         <paper-dropdown class="dropdown">
           <core-menu class="menu">
-            <paper-icon-button icon="mail"></paper-icon-button>
+            <paper-icon-button icon="mail" on-tap="{{mail}}"></paper-icon-button>
             <paper-icon-button icon="notification:mms" on-tap="{{share}}"></paper-icon-button>
           </core-menu>
         </paper-dropdown>
@@ -29,9 +29,13 @@
   <script>
     Polymer({
       src: "https://s3-us-west-1.amazonaws.com/skycamimages/upload/m.jpg",
-      share: function(name) {
-        console.log("sharing image: " + this.src);
-        socket.emit('share image', {filename: this.src});
+      mail: function() {
+        console.log("mailing photo: " + this.src);
+        socket.emit('mail photo', {filename: this.src});
+      },
+      share: function() {
+        console.log("text photo: " + this.src);
+        socket.emit('text photo', {filename: this.src});
       }
     });
   </script>
