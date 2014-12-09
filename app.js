@@ -14,6 +14,7 @@ var s3bucket = new AWS.S3({params: {Bucket: aws_config.bucket}});
 var twilio_config = require(__dirname + '/config/twilio.js')[env];
 var twilio_client = require('twilio')(twilio_config.accountSid, twilio_config.authToken);
 var sendgrid_config = require(__dirname + '/config/sendgrid.js')[env];
+var sendgrid = require('sendgrid')(sendgrid_config.user, sendgrid_config.password);
 
 function pushToBucket(data) {
   s3bucket.putObject(data, function(err, data) {
@@ -34,11 +35,20 @@ function sendText(recipient, message, mediaUrl) {
 }
 
 function mailPhoto(data) {
-  console.log('emailing photo');
+  console.log('a user is sendin a photo via email');
+  var email = new sendgrid.Email();
+  email.addTo("matthias@virsix.com");
+  email.setFrom(sendgrid_config.from);
+  email.setSubject("A mail from sendgrid");
+  email.setText("Wassup!\nnoded...");
+  sendgrid.send(email, function(err, json) {
+    if (err) return console.log(err);
+    console.log(json);
+  });
 }
 
 function textPhoto(data) {
-  console.log('a user wants to share an image');
+  console.log('a user is sending a photo via text message');
   console.log(data);
   if(!(data.filename.split(":").length > 1)) { // if filename does not contain a protocol "http://domain.com/file.jpg"
     fs.readFile(__dirname + '/' + data.filename, function(err, file) {
