@@ -22,11 +22,19 @@ function pushToBucket(data) {
 
 function handler(req, resp) {
   var url;
-  if(req.url.split('/')[1] == 'images') {
+/*  if(req.url.split('/')[1] == 'images') {
+    url = req.url;
+  } else if ((req.url.split('/')[1] == 'components')
+      || (req.url.split('/')[2] == 'components')
+      || (req.url.split('/')[1] == 'bower_components')
+      || (req.url.split('/')[2] == 'bower_components'))
+  {
     url = req.url;
   } else {
     url = '/views/index.html';
   }
+  */
+  url = req.url;
   fs.readFile(__dirname + url, function(err, data) {
     if(err) {
       resp.writeHead(500);
@@ -54,29 +62,37 @@ io.on('connection', function(socket) {
   socket.on('share image', function(data) {
     console.log('a user wants to share an image');
     console.log(data);
-    fs.readFile(__dirname + '/images/' + data.filename, function(err, file) {
-      if(err) console.log('error reading file: ' + data.filename);
-      else {
-        pushToBucket({
-          Key: 'upload/' + data.filename,
-          Body: file,
-          ACL: 'public-read'
-        });
-        var aws_url = "http://s3-" + aws_config.region + ".amazonaws.com/" + aws_config.bucket + "/upload/" + data.filename;
-        console.log(aws_url);
-        sendText(twilio_config.default_recipient,
-                 "Grab your photo now, before it's gone: ",
-                 aws_url
-        );
-      }
-    });
+    console.log("length: " + data.filename.split(":").length);
+    if(!(data.filename.split(":").length > 1)) { // if filename does not contain a protocol "http://domain.com/file.jpg"
+      fs.readFile(__dirname + '/' + data.filename, function(err, file) {
+      //fs.readFile(__dirname + '/images/' + data.filename, function(err, file) {
+        if(err) console.log('error reading file: ' + data.filename);
+        else {
+          pushToBucket({
+            Key: 'upload/' + data.filename,
+            Body: file,
+            ACL: 'public-read'
+          });
+          var aws_url = "http://s3-" + aws_config.region + ".amazonaws.com/" + aws_config.bucket + "/upload/" + data.filename;
+          console.log(aws_url);
+          sendText(twilio_config.default_recipient,
+                  "Grab your photo now, before it's gone: ",
+                  aws_url
+          );
+        }
+      });
+    } else {
+      console.log("Error: Not a local file. Aborting...");
+    }
   });
 });
 
 fs.watch(__dirname + '/images/', function(event, name) {
   if(event) console.log("event: " + event);
   if(name) console.log("name: " + name);
-  if (event == "change" && name) {
+  if (name) {
+  // TODO: uncomment next line on linux machine and delete the line above
+  //if (event == "change" && name) {
     broadcast_change(name);
   }
 });

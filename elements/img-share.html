@@ -1,0 +1,38 @@
+<link rel="import" href="../bower_components/polymer/polymer.html" />
+<link rel="import" href="../bower_components/core-icons/notification-icons.html" />
+<link rel="import" href="../bower_components/core-menu/core-menu.html" />
+<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html" />
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html" />
+<link rel="import" href="../bower_components/paper-dropdown/paper-dropdown.html" />
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html" />
+<script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
+<script>var socket = io('http://localhost:3000');</script>
+
+<polymer-element name="img-share" attributes="src">
+  <template>
+    <div layout center vertical flex>
+      <paper-menu-button>
+        <paper-shadow z="5">
+          <img src="{{src}}" />
+        </paper-shadow>
+        <paper-dropdown class="dropdown">
+          <core-menu class="menu">
+            <paper-icon-button icon="mail"></paper-icon-button>
+            <paper-icon-button icon="notification:mms" on-tap="{{share}}"></paper-icon-button>
+          </core-menu>
+        </paper-dropdown>
+        <paper-toast text="New photo" opened></paper-toast>
+      </paper-menu-button>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      src: "https://s3-us-west-1.amazonaws.com/skycamimages/upload/m.jpg",
+      share: function(name) {
+        console.log("sharing image: " + this.src);
+        socket.emit('share image', {filename: this.src});
+      }
+    });
+  </script>
+</polymer-element>
