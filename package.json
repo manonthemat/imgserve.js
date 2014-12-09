@@ -1,6 +1,6 @@
 {
   "name": "imgserve.js",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "a image server/client application using sockets",
   "dependencies": {
     "aws-sdk": "^2.0.29",

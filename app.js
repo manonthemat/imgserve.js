@@ -40,7 +40,11 @@ function mailPhoto(data) {
   email.addTo("matthias@virsix.com");
   email.setFrom(sendgrid_config.from);
   email.setSubject("A mail from sendgrid");
-  email.setText("Wassup!\nnoded...");
+  email.setText("Look at you!\nYou got hoops!");
+  email.addFile({
+    filename: "slamdunk.jpg",
+    path: data.filename
+  });
   sendgrid.send(email, function(err, json) {
     if (err) return console.log(err);
     console.log(json);
