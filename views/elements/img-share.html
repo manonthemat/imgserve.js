@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html" />
 <link rel="import" href="../bower_components/core-icons/notification-icons.html" />
 <link rel="import" href="../bower_components/core-menu/core-menu.html" />
-<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html" />
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html" />
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html" />
 <link rel="import" href="../bower_components/paper-dropdown/paper-dropdown.html" />
@@ -9,13 +9,14 @@
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>var socket = io('http://localhost:3000');</script>
 
-<polymer-element name="img-share" attributes="src width">
+<polymer-element name="img-share" attributes="src width ripplecolor initialopacity opacitydecayvelocity">
   <template>
     <div>
       <paper-menu-button>
-        <paper-shadow z="5">
-          <img src="{{src}}" style="width: {{width}}"/>
-        </paper-shadow>
+        <div>
+          <paper-ripple class="circle" style="color:{{ripplecolor}}" initialOpacity="{{initialopacity}}" opacityDecayVelocity="{{opacitydecayvelocity}}" fit></paper-ripple>
+          <img src="{{src}}" style="width: {{width}};" />
+        </div>
         <paper-dropdown class="dropdown">
           <core-menu class="menu">
             <paper-icon-button icon="mail" on-tap="{{sendMail}}"></paper-icon-button>
@@ -30,6 +31,9 @@
     Polymer({
       src: "images/mj.jpg",
       width: "100vw",
+      ripplecolor: "silver",
+      initialopacity: 0.7,
+      opacitydecayvelocity: 1,
       sendMail: function() {
         console.log("mailing photo: " + this.src);
         socket.emit('mail photo', {filename: this.src});
