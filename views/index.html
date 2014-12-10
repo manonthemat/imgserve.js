@@ -24,11 +24,14 @@
     </core-scroll-header-panel>
     <script>
       var socket = io('http://localhost:3000');
+      var parent = document.getElementById('content');
       socket.on('file changed', function(data) {
         console.log('file changed');
+        var firstChild = parent.firstChild;
         var new_img = document.createElement('img-share');
         new_img.src = "images/" + data.filename;
-        document.querySelector("#content").appendChild(new_img);
+        //document.querySelector("#content").appendChild(new_img);
+        parent.insertBefore(new_img, firstChild);
       });
     </script>
   </body>
