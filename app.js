@@ -79,16 +79,17 @@ fs.watch(__dirname + '/images/', function(event, name) {
   if(event) console.log("event: " + event);
   if(name) console.log("name: " + name);
   if (name) {
+    var filepath = __dirname + '/images/' + name;
   // TODO: uncomment next line on linux machine and delete the line above
   //if (event == "change" && name) {
-    fs.readFile(__dirname + '/images/' + name, function(err, file) {
+    fs.readFile(filepath, function(err, file) {
       if(err) console.error('error reading file: ' + name + '\n' + err);
       else {
         pushToBucket({
           Key: 'upload/images/' + name,
           Body: file,
           ACL: 'public-read',
-          ContentType: mime.lookup(__dirname + '/images/' + name),
+          ContentType: mime.lookup(filepath),
           ContentLength: file.size
         });
       }
