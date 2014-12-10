@@ -24,10 +24,12 @@ function pushToBucket(data) {
 }
 
 function sendText(recipient, message, mediaUrl) {
+  console.log("mediaUrl in sendText: " + mediaUrl);
   twilio_client.sendMessage({
     to: recipient,
     from: twilio_config.number,
-    body: message + mediaUrl
+    body: message + mediaUrl,
+    mediaUrl: mediaUrl // doesn't like our S3 urls for some reason yet
   }, function(err, data) {
     if(err) console.error(err);
     if(data) console.log(data);

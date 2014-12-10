@@ -9,12 +9,12 @@
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>var socket = io('http://localhost:3000');</script>
 
-<polymer-element name="img-share" attributes="src">
+<polymer-element name="img-share" attributes="src width">
   <template>
-    <div layout center vertical flex>
+    <div>
       <paper-menu-button>
         <paper-shadow z="5">
-          <img src="{{src}}" />
+          <img src="{{src}}" style="width: {{width}}"/>
         </paper-shadow>
         <paper-dropdown class="dropdown">
           <core-menu class="menu">
@@ -29,6 +29,7 @@
   <script>
     Polymer({
       src: "images/mj.jpg",
+      width: "100vw",
       sendMail: function() {
         console.log("mailing photo: " + this.src);
         socket.emit('mail photo', {filename: this.src});
