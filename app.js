@@ -3,6 +3,7 @@ var app = express();
 app.set('port', process.env.PORT || 8000);
 var io = require('socket.io')(require('http').Server(app));
 var fs = require('fs');
+var mime = require('mime');
 
 var env = process.env.NODE_ENV || 'development';
 var aws_config = require(__dirname + '/config/aws.js')[env];
@@ -24,12 +25,11 @@ function pushToBucket(data) {
 }
 
 function sendText(recipient, message, mediaUrl) {
-  console.log("mediaUrl in sendText: " + mediaUrl);
   twilio_client.sendMessage({
     to: recipient,
     from: twilio_config.number,
-    body: message + mediaUrl,
-    mediaUrl: mediaUrl // doesn't like our S3 urls for some reason yet
+    body: message,
+    mediaUrl: mediaUrl
   }, function(err, data) {
     if(err) console.error(err);
     if(data) console.log(data);
@@ -38,7 +38,6 @@ function sendText(recipient, message, mediaUrl) {
 
 function mailPhoto(data, recipient) {
   console.log('a user is sending a photo via email');
-  console.log('data.filename in mailPhoto: ' + data.filename);
   var email = new sendgrid.Email();
   if(!recipient) {
     console.error("no recipient passed. mailing photo to matthias@virsix.com");
@@ -88,7 +87,9 @@ fs.watch(__dirname + '/images/', function(event, name) {
         pushToBucket({
           Key: 'upload/images/' + name,
           Body: file,
-          ACL: 'public-read'
+          ACL: 'public-read',
+          ContentType: mime.lookup(__dirname + '/images/' + name),
+          ContentLength: file.size
         });
       }
     });
