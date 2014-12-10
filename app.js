@@ -40,8 +40,8 @@ function mailPhoto(data, recipient) {
   console.log('a user is sending a photo via email');
   var email = new sendgrid.Email();
   if(!recipient) {
-    console.error("no recipient passed. mailing photo to matthias@virsix.com");
-    recipient = "matthias@virsix.com";
+    recipient = sendgrid_config.default_recipient;
+    console.error("no recipient passed. mailing photo to default recipient: " + recipient);
   }
   email.addTo(recipient);
   email.setFrom(sendgrid_config.from);

@@ -3,6 +3,7 @@ var sendgrid_config = {
     user: "",
     password: "",
     from: "",
+    default_recipient: "",
     subject: "",
     text: "",
     filename: ""
@@ -11,6 +12,7 @@ var sendgrid_config = {
     user: "",
     password: "",
     from: "",
+    default_recipient: "",
     subject: "",
     text: "",
     filename: ""
