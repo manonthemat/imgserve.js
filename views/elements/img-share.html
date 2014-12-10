@@ -6,12 +6,18 @@
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html" />
 <link rel="import" href="../bower_components/paper-dropdown/paper-dropdown.html" />
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html" />
+<link rel="import" href="../bower_components/paper-input/paper-input-decorator.html" />
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>var socket = io('http://localhost:3000');</script>
 
 <polymer-element name="img-share" attributes="src width ripplecolor initialopacity opacitydecayvelocity">
   <template>
     <div>
+      <paper-input-decorator label="enter your email" floatingLabel="true" error="please enter a valid email address">
+        <form>
+          <input is="core-input" name="email" value="{{emailAddress}}" type="email" />
+        </form>
+      </paper-input-decorator>
       <paper-menu-button>
         <div>
           <paper-ripple class="circle" style="color:{{ripplecolor}}" initialOpacity="{{initialopacity}}" opacityDecayVelocity="{{opacitydecayvelocity}}" fit></paper-ripple>
@@ -19,7 +25,7 @@
         </div>
         <paper-dropdown class="dropdown">
           <core-menu class="menu">
-            <paper-icon-button icon="mail" on-tap="{{sendMail}}"></paper-icon-button>
+            <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
             <paper-icon-button icon="notification:mms" on-tap="{{sendMms}}"></paper-icon-button>
           </core-menu>
         </paper-dropdown>
@@ -36,11 +42,21 @@
       opacitydecayvelocity: 1,
       sendMail: function() {
         console.log("mailing photo: " + this.src);
-        socket.emit('mail photo', {filename: this.src});
+        socket.emit('mail photo', {filename: this.src, recipient: this.emailAddress});
       },
       sendMms: function() {
         console.log("text photo: " + this.src);
         socket.emit('text photo', {filename: this.src});
+      },
+      validEmail: false,
+      emailAddressChanged: function(oldVal, newVal) {
+        console.log('validating email address: ' + newVal);
+        if(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(newVal)) {
+          console.log('valid email');
+          this.validEmail = true;
+        } else {
+          this.validEmail = false;
+        }
       }
     });
   </script>

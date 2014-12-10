@@ -1,7 +1,14 @@
 {
   "name": "imgserve.js",
-  "version": "0.1.0",
-  "description": "a image server/client application using sockets",
+  "version": "0.1.1",
+  "description": "an image streaming and sharing application using sockets",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manonthemat/imgserve.js.git"
+  },
+  "author": {
+    "name": "Matthias Sieber"
+  },
   "dependencies": {
     "aws-sdk": "^2.0.29",
     "express": "^4.10.4",
@@ -9,5 +16,8 @@
     "sendgrid": "^1.3.0",
     "socket.io": "^1.2.1",
     "twilio": "^1.9.0"
+  },
+  "bugs": {
+    "url": "https://github.com/manonthemat/imgserve.js/issues"
   }
 }

@@ -36,14 +36,14 @@ function sendText(recipient, message, mediaUrl) {
   });
 }
 
-function mailPhoto(data, recipient) {
+function mailPhoto(data) {
   console.log('a user is sending a photo via email');
   var email = new sendgrid.Email();
-  if(!recipient) {
+  if(!data.recipient) {
     recipient = sendgrid_config.default_recipient;
     console.error("no recipient passed. mailing photo to default recipient: " + recipient);
   }
-  email.addTo(recipient);
+  email.addTo(data.recipient);
   email.setFrom(sendgrid_config.from);
   email.setSubject(sendgrid_config.subject);
   email.setText(sendgrid_config.text);
