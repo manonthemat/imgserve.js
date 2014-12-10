@@ -63,10 +63,8 @@ function composeS3Url(local_filename) {
 
 function textPhoto(data) {
   console.log('a user is sending a photo via text message');
-  sendText(twilio_config.default_recipient,
-          "Grab your photo now, before it's gone: ",
-          composeS3Url(data.filename)
-  );
+  if(!data.recipient) { recipient = twilio_config.default_recipient; }
+  sendText(data.recipient, twilio_config.message, composeS3Url(data.filename));
 }
 
 io.on('connection', function(socket) {
