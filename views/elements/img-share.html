@@ -10,24 +10,25 @@
 
 <polymer-element name="img-share" attributes="src width ripplecolor initialopacity opacitydecayvelocity">
   <template>
-    <div on-tap="{{openDialog}}">
-      <paper-ripple class="circle" style="color:{{ripplecolor}}" initialOpacity="{{initialopacity}}" opacityDecayVelocity="{{opacitydecayvelocity}}" fit></paper-ripple>
+    <div style="width:100%; height:100%;" on-tap="{{openDialog}}">
       <img src="{{src}}" style="width: {{width}};" />
+      <!--<paper-ripple class="circle" style="color:{{ripplecolor}}" initialOpacity="{{initialopacity}}" opacityDecayVelocity="{{opacitydecayvelocity}}" fit></paper-ripple>-->
       <paper-toast text="New photo" opened></paper-toast>
+      <paper-dialog backdrop heading="Share this Optimal Moment Snap {{src}}" opened?="{{showDialog}}" transition="core-transition-center">
+        <paper-input-decorator label="enter your email" floatingLabel="true">
+          <input is="core-input" name="email" value="{{emailAddress}}" type="email" />
+        </paper-input-decorator>
+        <paper-input-decorator label="enter your phone number" floatingLabel="true">
+          <input is="core-input" name="phone" value="{{phoneNumber}}" type="tel" />
+        </paper-input-decorator>
+        <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
+        <paper-icon-button icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button>
+      </paper-dialog>
     </div>
-    <paper-dialog heading="Share this photo {{src}}" opened?="{{showDialog}}" transition="core-transition-center" layered>
-      <paper-input-decorator label="enter your email" floatingLabel="true">
-        <input is="core-input" name="email" value="{{emailAddress}}" type="email" />
-      </paper-input-decorator>
-      <paper-input-decorator label="enter your phone number" floatingLabel="true">
-        <input is="core-input" name="phone" value="{{phoneNumber}}" type="tel" />
-      </paper-input-decorator>
-      <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
-      <paper-icon-button icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button>
-    </paper-dialog>
   </template>
   <script>
     // TODO: fix scoping of dialog
+  (function() {
     Polymer({
       src: "images/mj.jpg",
       width: "100vw",
@@ -78,5 +79,6 @@
         }
       }
     });
+  })();
   </script>
 </polymer-element>
