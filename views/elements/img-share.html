@@ -1,6 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html" />
 <link rel="import" href="../bower_components/core-icons/notification-icons.html" />
-<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html" />
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html" />
 <link rel="import" href="../bower_components/paper-input/paper-input-decorator.html" />
@@ -8,13 +7,12 @@
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>var socket = io('http://localhost:3000');</script>
 
-<polymer-element name="img-share" attributes="src width ripplecolor initialopacity opacitydecayvelocity">
+<polymer-element name="img-share" attributes="src width heading">
   <template>
-    <div style="width:100%; height:100%;" on-tap="{{openDialog}}">
+    <div on-tap="{{openDialog}}">
       <img src="{{src}}" style="width: {{width}};" />
-      <!--<paper-ripple class="circle" style="color:{{ripplecolor}}" initialOpacity="{{initialopacity}}" opacityDecayVelocity="{{opacitydecayvelocity}}" fit></paper-ripple>-->
       <paper-toast text="New photo" opened></paper-toast>
-      <paper-dialog backdrop heading="Share this Optimal Moment Snap {{src}}" opened?="{{showDialog}}" transition="core-transition-center">
+      <paper-dialog backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-center">
         <paper-input-decorator label="enter your email" floatingLabel="true">
           <input is="core-input" name="email" value="{{emailAddress}}" type="email" />
         </paper-input-decorator>
@@ -32,25 +30,13 @@
     Polymer({
       src: "images/mj.jpg",
       width: "100vw",
-      ripplecolor: "silver",
-      initialopacity: 0.7,
-      opacitydecayvelocity: 1,
+      heading: "Share this photo",
       showDialog: false,
       openDialog: function(e) {
-        console.log(e);
         var d = e.path[2].querySelector('paper-dialog');
         d.toggle();
-        /*
-        if(this.showDialog) {
-          this.showDialog = false;
-        }
-        else {
-          this.showDialog = true;
-        }
-        */
       },
       sendMail: function() {
-        console.log(this.src);
         console.log("mailing photo: " + this.src);
         socket.emit('mail photo', {filename: this.src, recipient: this.emailAddress});
       },
@@ -60,21 +46,21 @@
       },
       validEmail: false,
       emailAddressChanged: function(oldVal, newVal) {
-        console.log('validating email address: ' + newVal);
         if(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(newVal)) {
           console.log('valid email address');
           this.validEmail = true;
         } else {
+          console.log('invalid email address');
           this.validEmail = false;
         }
       },
       validPhone: false,
       phoneNumberChanged: function(oldVal, newVal) {
-        console.log('validating phone number: ' + newVal);
         if(/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/.test(newVal)) {
           console.log('valid phone number');
           this.validPhone = true;
         } else {
+          console.log('invalid phone number');
           this.validPhone = false;
         }
       }
