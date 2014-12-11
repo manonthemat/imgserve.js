@@ -3,14 +3,28 @@
   <head>
     <title>imgserve</title>
     <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
-    <link rel="import" href="bower_components/core-toolbar/core-toolbar.html" />
     <link rel="import" href="bower_components/core-scroll-header-panel/core-scroll-header-panel.html" />
+    <link rel="import" href="bower_components/core-toolbar/core-toolbar.html" />
+    <link rel="import" href="bower_components/core-icon/core-icon.html" />
+    <link rel="import" href="bower_components/core-icons/core-icons.html" />
+    <link rel="import" href="../bower_components/core-icons/notification-icons.html" />
+    <link rel="import" href="bower_components/paper-dropdown/paper-dropdown.html" />
     <link rel="import" href="elements/img-share.html" />
+    <link rel="import" href="elements/x-trigger.html" />
   </head>
   <body fullbleed layout vertical unresolved>
     <core-scroll-header-panel flex>
       <core-toolbar>
         <div class="title">imgserve</div>
+        <div class="info">
+          <x-trigger icon="info">
+            <paper-dropdown>
+              <p>To send a photo via email, tap on a photo and enter a valid email address and then hit the <core-icon icon="mail"></core-icon> button to send it.</p>
+              <p>To send a photo via mms, tap on a photo and enter a valid phone number and then hit the <core-icon icon="notification:mms"></core-icon> button to send it.</p>
+              <p>You will see a notification in the left corner of the screen when a new photo comes in. To see that new photo, scroll all the way to the top.</p>
+            </paper-dropdown>
+          </x-trigger>
+        </div>
       </core-toolbar>
       <main id="content">
         <img-share></img-share>
