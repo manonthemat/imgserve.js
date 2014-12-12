@@ -2,7 +2,7 @@
 <link rel="import" href="../bower_components/core-icons/notification-icons.html" />
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html" />
-<link rel="import" href="../bower_components/paper-input/paper-input-decorator.html" />
+<link rel="import" href="../bower_components/core-input/core-input.html" />
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html" />
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>var socket = io('http://localhost:3000');</script>
@@ -13,14 +13,14 @@
       <img src="{{src}}" style="width: {{width}}" />
       <paper-toast text="New photo" opened></paper-toast>
       <paper-dialog backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-center">
-        <paper-input-decorator label="enter your email" floatingLabel="true">
-          <input is="core-input" name="email" value="{{emailAddress}}" type="email" />
-        </paper-input-decorator>
-        <paper-input-decorator label="enter your phone number" floatingLabel="true">
-          <input is="core-input" name="phone" value="{{phoneNumber}}" type="tel" />
-        </paper-input-decorator>
-        <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
-        <paper-icon-button icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button>
+        <div layout horizontal style="margin-bottom:20px">
+          <input is="core-input" placeholder="enter your email" name="email" value="{{emailAddress}}" type="email" />
+          <paper-icon-button style="margin:0;padding:0;" icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
+        </div>
+        <div layout horizontal>
+          <input is="core-input" placeholder="enter your phone number" name="phone" value="{{phoneNumber}}" type="tel" />
+          <paper-icon-button style="margin:0;padding:0" icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button>
+        </div>
       </paper-dialog>
     </div>
   </template>
