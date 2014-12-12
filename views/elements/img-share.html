@@ -15,11 +15,11 @@
       <paper-dialog backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-center">
         <div layout horizontal style="margin-bottom:20px">
           <input is="core-input" placeholder="enter your email" name="email" value="{{emailAddress}}" type="email" />
-          <paper-icon-button style="margin:0;padding:0;" icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
+          <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
         </div>
         <div layout horizontal>
           <input is="core-input" placeholder="enter your phone number" name="phone" value="{{phoneNumber}}" type="tel" />
-          <paper-icon-button style="margin:0;padding:0" icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button>
+          <paper-icon-button icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button>
         </div>
       </paper-dialog>
     </div>
