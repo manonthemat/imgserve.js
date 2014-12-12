@@ -104,6 +104,7 @@ app.get('/', function(req, resp) {
   resp.sendFile(__dirname + '/views/index.html');
 });
 app.use(express.static('views'));
+app.use('/assets', express.static('assets'));
 app.use('/images', express.static('images'));
 app.use('/bower_components', express.static('bower_components'));
 app.listen(app.get('port'), function() {

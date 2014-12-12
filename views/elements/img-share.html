@@ -7,12 +7,12 @@
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>var socket = io('http://localhost:3000');</script>
 
-<polymer-element name="img-share" attributes="src width heading">
+<polymer-element name="img-share" attributes="src width heading dColBg dColFg">
   <template>
     <div on-tap="{{openDialog}}">
       <img src="{{src}}" style="width: {{width}};" />
       <paper-toast text="New photo" opened></paper-toast>
-      <paper-dialog backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-center">
+      <paper-dialog style="background-color: {{dColBg}}; color: {{dColFg}}" backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-center">
         <paper-input-decorator label="enter your email" floatingLabel="true">
           <input is="core-input" name="email" value="{{emailAddress}}" type="email" />
         </paper-input-decorator>
@@ -25,12 +25,13 @@
     </div>
   </template>
   <script>
-    // TODO: fix scoping of dialog
   (function() {
     Polymer({
       src: "images/mj.jpg",
       width: "100vw",
       heading: "Share this photo",
+      dColBg: 'white',
+      dColFg: 'black',
       showDialog: false,
       openDialog: function(e) {
         var d = e.path[2].querySelector('paper-dialog');
@@ -56,7 +57,7 @@
       },
       validPhone: false,
       phoneNumberChanged: function(oldVal, newVal) {
-        if(/[0-9]{10}|^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/.test(newVal)) {
+        if(/[0-9]{10}|^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/.test(newVal)) {
           console.log('valid phone number');
           this.validPhone = true;
         } else {
