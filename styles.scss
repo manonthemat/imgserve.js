@@ -1,6 +1,15 @@
 $primary-color: rgb(253, 115, 43);
 $secondary-color: rgb(2,139,255);
 
+@font-face {
+  font-family: "Nexa Bold";
+  src: url('/assets/fonts/NexaBold.otf')
+}
+
+body {
+  font-family: "Nexa Bold";
+}
+
 #overlay {
   position: fixed;
   top: 0;
