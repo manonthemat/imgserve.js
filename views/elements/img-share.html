@@ -56,7 +56,7 @@
       },
       validPhone: false,
       phoneNumberChanged: function(oldVal, newVal) {
-        if(/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/.test(newVal)) {
+        if(/[0-9]{10}|^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/.test(newVal)) {
           console.log('valid phone number');
           this.validPhone = true;
         } else {
