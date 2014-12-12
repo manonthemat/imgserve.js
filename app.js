@@ -17,6 +17,24 @@ var twilio_client = require('twilio')(twilio_config.accountSid, twilio_config.au
 var sendgrid_config = require(__dirname + '/config/sendgrid.js')[env];
 var sendgrid = require('sendgrid')(sendgrid_config.user, sendgrid_config.password);
 
+var sass = require('node-sass');
+var sass_stats = {};
+sass.renderFile({
+  file: __dirname + '/styles.scss',
+  outFile: __dirname + '/assets/css/styles.css',
+  stats: sass_stats,
+  outputStyle: 'compressed',
+  success: function(css) {
+    console.log('Compiling CSS');
+    console.log(css);
+    console.log(sass_stats);
+  },
+  error: function(err) {
+    console.log('Error compiling CSS');
+    console.error(err);
+  }
+});
+
 function pushToBucket(data) {
   s3bucket.putObject(data, function(err, data) {
     if(err) console.error("An error occured while trying to push to S3 bucket\n", err);

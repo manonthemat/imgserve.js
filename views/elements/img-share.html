@@ -7,12 +7,12 @@
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>var socket = io('http://localhost:3000');</script>
 
-<polymer-element name="img-share" attributes="src width heading dColBg dColFg">
+<polymer-element name="img-share" attributes="src width heading">
   <template>
     <div on-tap="{{openDialog}}">
-      <img src="{{src}}" style="width: {{width}};" />
+      <img src="{{src}}" style="width: {{width}}" />
       <paper-toast text="New photo" opened></paper-toast>
-      <paper-dialog style="background-color: {{dColBg}}; color: {{dColFg}}" backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-center">
+      <paper-dialog backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-center">
         <paper-input-decorator label="enter your email" floatingLabel="true">
           <input is="core-input" name="email" value="{{emailAddress}}" type="email" />
         </paper-input-decorator>
@@ -30,8 +30,6 @@
       src: "images/mj.jpg",
       width: "100vw",
       heading: "Share this photo",
-      dColBg: 'white',
-      dColFg: 'black',
       showDialog: false,
       openDialog: function(e) {
         var d = e.path[2].querySelector('paper-dialog');

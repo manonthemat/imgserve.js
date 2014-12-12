@@ -12,20 +12,9 @@
     <link rel="import" href="bower_components/paper-dropdown/paper-dropdown.html" />
     <link rel="import" href="elements/img-share.html" />
     <link rel="import" href="elements/x-trigger.html" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <style>
-      #overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 100;
-        opacity: 0.7;
-        width: 100%;
-        background: url('/assets/img/headerGradient.png');
-        height: 163px;
-      }
-    </style>
   </head>
   <body fullbleed layout vertical unresolved>
     <section id="overlay">
@@ -38,7 +27,7 @@
       </x-trigger>
     </section>
     <main id="content">
-      <img-share dColBg="#fd732b" dColFg="white"></img-share>
+      <img-share></img-share>
     </main>
     <script>
       var socket = io('http://localhost:3000');
@@ -48,8 +37,6 @@
         var firstChild = parent.firstChild;
         var new_img = document.createElement('img-share');
         new_img.src = "images/" + data.filename;
-        new_img.dColBg = "#fd732b";
-        new_img.dColFg = "white";
         parent.insertBefore(new_img, firstChild);
       });
     </script>
