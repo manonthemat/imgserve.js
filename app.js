@@ -4,22 +4,7 @@ app.set('port', process.env.PORT || 8000);
 var io = require('socket.io')(require('http').Server(app));
 var fs = require('fs');
 var mime = require('mime');
-
-var winston = require('winston');
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({
-      level: 'debug',
-      colorize: true
-    }),
-    new (winston.transports.DailyRotateFile)({
-      level: 'debug',
-      filename: __dirname + '/logs/imgserve',
-      datePattern: '.yyyy-MM-dd-HH-mm'
-    })
-  ]
-});
-
+var logger = require(__dirname + '/config/logging.js');
 var env = process.env.NODE_ENV || 'development';
 var aws_config = require(__dirname + '/config/aws.js')[env];
 var AWS = require('aws-sdk');
