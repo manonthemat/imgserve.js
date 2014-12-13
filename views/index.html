@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
+  <head lang="en">
     <title>imgserve</title>
     <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
-    <link rel="import" href="bower_components/core-header-panel/core-header-panel.html" />
-    <link rel="import" href="bower_components/core-toolbar/core-toolbar.html" />
     <link rel="import" href="bower_components/core-icon/core-icon.html" />
     <link rel="import" href="bower_components/core-icons/core-icons.html" />
     <link rel="import" href="../bower_components/core-icons/notification-icons.html" />
-    <link rel="import" href="bower_components/paper-fab/paper-fab.html" />
     <link rel="import" href="bower_components/paper-dropdown/paper-dropdown.html" />
     <link rel="import" href="elements/img-share.html" />
     <link rel="import" href="elements/x-trigger.html" />
@@ -17,9 +14,11 @@
     <meta name="mobile-web-app-capable" content="yes" />
   </head>
   <body fullbleed layout vertical unresolved>
-    <section id="overlay">
+    <section horizontal justified layout id="overlay">
+      <div><!-- empty div for easier layouting --></div>
+      <div><img src="/assets/img/header.png" /></div>
       <x-trigger src="/assets/img/info.png">
-        <paper-dropdown>
+        <paper-dropdown class="info">
           <p>To send a photo via email, tap on a photo and enter a valid email address and then hit the <core-icon icon="mail"></core-icon> button to send it.</p>
           <p>To send a photo via mms, tap on a photo and enter a valid phone number and then hit the <core-icon icon="notification:mms"></core-icon> button to send it.</p>
           <p>You will see a notification in the left bottom corner of the screen when a new photo comes in. To see that new photo, scroll all the way to the top.</p>
