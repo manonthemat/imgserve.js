@@ -4,6 +4,19 @@ app.set('port', process.env.PORT || 8000);
 var io = require('socket.io')(require('http').Server(app));
 var fs = require('fs');
 var mime = require('mime');
+var moment = require('moment');
+
+var now = moment();
+var winston = require('winston');
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({ level: 'debug' }),
+    new (winston.transports.File)({
+      filename: __dirname + '/logs/' + now.format("YYYY-MM-DD-HH-mm") + '.log',
+      level: 'debug'
+    })
+  ]
+});
 
 var env = process.env.NODE_ENV || 'development';
 var aws_config = require(__dirname + '/config/aws.js')[env];
@@ -18,27 +31,23 @@ var sendgrid_config = require(__dirname + '/config/sendgrid.js')[env];
 var sendgrid = require('sendgrid')(sendgrid_config.user, sendgrid_config.password);
 
 var sass = require('node-sass');
-var sass_stats = {};
 sass.renderFile({
   file: __dirname + '/styles.scss',
   outFile: __dirname + '/assets/css/styles.css',
-  stats: sass_stats,
   outputStyle: 'compressed',
   success: function(css) {
-    console.log('Compiling CSS');
-    console.log(css);
-    console.log(sass_stats);
+    logger.info('CSS compiled');
   },
   error: function(err) {
-    console.log('Error compiling CSS');
-    console.error(err);
+    logger.error('Error compiling CSS');
+    logger.error(err);
   }
 });
 
 function pushToBucket(data) {
   s3bucket.putObject(data, function(err, data) {
-    if(err) console.error("An error occured while trying to push to S3 bucket\n", err);
-    else console.log("push to s3 successful");
+    if(err) logger.error("An error occured while trying to push to S3 bucket\n", err);
+    else logger.info("push to s3 successful");
   });
 }
 
@@ -49,17 +58,17 @@ function sendText(recipient, message, mediaUrl) {
     body: message,
     mediaUrl: mediaUrl
   }, function(err, data) {
-    if(err) console.error(err);
-    if(data) console.log(data);
+    if(err) logger.error(err);
+    if(data) logger.error(data);
   });
 }
 
 function mailPhoto(data) {
-  console.log('a user is sending a photo via email');
+  logger.info('a user is sending a photo via email');
   var email = new sendgrid.Email();
   if(!data.recipient) {
     recipient = sendgrid_config.default_recipient;
-    console.error("no recipient passed. mailing photo to default recipient: " + recipient);
+    logger.error("no recipient passed. mailing photo to default recipient: " + recipient);
   }
   email.addTo(data.recipient);
   email.setFrom(sendgrid_config.from);
@@ -70,8 +79,8 @@ function mailPhoto(data) {
     path: data.filename
   });
   sendgrid.send(email, function(err, json) {
-    if (err) return console.error(err);
-    console.log(json);
+    if (err) return logger.error(err);
+    logger.info(json);
   });
 }
 
@@ -80,26 +89,26 @@ function composeS3Url(local_filename) {
 }
 
 function textPhoto(data) {
-  console.log('a user is sending a photo via text message');
+  logger.info('a user is sending a photo via text message');
   if(!data.recipient) { recipient = twilio_config.default_recipient; }
   sendText(data.recipient, twilio_config.message, composeS3Url(data.filename));
 }
 
 io.on('connection', function(socket) {
-  console.log('new connection established');
+  logger.info('new connection established');
   socket.on('mail photo', mailPhoto);
   socket.on('text photo', textPhoto);
 });
 
 fs.watch(__dirname + '/images/', function(event, name) {
-  if(event) console.log("event: " + event);
-  if(name) console.log("name: " + name);
+  if(event) logger.info("event: " + event);
+  if(name) logger.info("name: " + name);
   if (name) {
     var filepath = __dirname + '/images/' + name;
   // TODO: uncomment next line on linux machine and delete the line above
   //if (event == "change" && name) {
     fs.readFile(filepath, function(err, file) {
-      if(err) console.error('error reading file: ' + name + '\n' + err);
+      if(err) logger.error('error reading file: ' + name + '\n' + err);
       else {
         pushToBucket({
           Key: 'upload/images/' + name,
@@ -126,6 +135,6 @@ app.use('/assets', express.static('assets'));
 app.use('/images', express.static('images'));
 app.use('/bower_components', express.static('bower_components'));
 app.listen(app.get('port'), function() {
-  console.log("Express server listening on port " + app.get('port'));
+  logger.info("Express server listening on port " + app.get('port'));
 });
 io.listen(3000);
