@@ -13,7 +13,7 @@
       <img src="{{src}}" style="width: {{width}}" />
       <paper-toast text="New photo" opened></paper-toast>
       <paper-dialog backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-center">
-        <div layout horizontal style="margin-bottom:20px">
+        <div layout horizontal>
           <input is="core-input" placeholder="enter your email" name="email" value="{{emailAddress}}" type="email" />
           <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
         </div>

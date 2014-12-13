@@ -1,6 +1,6 @@
 {
   "name": "imgserve.js",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "an image streaming and sharing application using sockets",
   "repository": {
     "type": "git",

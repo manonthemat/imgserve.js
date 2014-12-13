@@ -22,8 +22,8 @@ body {
   z-index: 100;
   opacity: 0.7;
   width: 100%;
-  background: url('/assets/img/headerGradient.png');
   height: 163px;
+  background: linear-gradient(180deg, rgba(0, 85, 213, 1), rgba(0, 86, 213, 0));
 }
 
 .core-opened overlay-host::shadow {
@@ -44,6 +44,10 @@ body {
     paper-icon-button {
       margin: 0 0 0 15px;
       padding: 0;
+    }
+
+    div {
+      margin-bottom: 20px;
     }
   }
 }
