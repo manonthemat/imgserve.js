@@ -10,7 +10,10 @@ var now = moment();
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
-    new (winston.transports.Console)({ level: 'debug' }),
+    new (winston.transports.Console)({
+      level: 'debug',
+      colorize: true
+    }),
     new (winston.transports.File)({
       filename: __dirname + '/logs/' + now.format("YYYY-MM-DD-HH-mm") + '.log',
       level: 'debug'
