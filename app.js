@@ -4,9 +4,7 @@ app.set('port', process.env.PORT || 8000);
 var io = require('socket.io')(require('http').Server(app));
 var fs = require('fs');
 var mime = require('mime');
-var moment = require('moment');
 
-var now = moment();
 var winston = require('winston');
 var logger = new (winston.Logger)({
   transports: [
@@ -14,9 +12,10 @@ var logger = new (winston.Logger)({
       level: 'debug',
       colorize: true
     }),
-    new (winston.transports.File)({
-      filename: __dirname + '/logs/' + now.format("YYYY-MM-DD-HH-mm") + '.log',
-      level: 'debug'
+    new (winston.transports.DailyRotateFile)({
+      level: 'debug',
+      filename: __dirname + '/logs/imgserve',
+      datePattern: '.yyyy-MM-dd-HH-mm'
     })
   ]
 });
