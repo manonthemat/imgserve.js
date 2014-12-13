@@ -1,10 +1,11 @@
+var logger = require(__dirname + '/config/logging.js');
+logger.info('logging started');
 var express = require('express');
 var app = express();
 app.set('port', process.env.PORT || 8000);
 var io = require('socket.io')(require('http').Server(app));
 var fs = require('fs');
 var mime = require('mime');
-var logger = require(__dirname + '/config/logging.js');
 var env = process.env.NODE_ENV || 'development';
 var aws_config = require(__dirname + '/config/aws.js')[env];
 var AWS = require('aws-sdk');
@@ -46,7 +47,7 @@ function sendText(recipient, message, mediaUrl) {
     mediaUrl: mediaUrl
   }, function(err, data) {
     if(err) logger.error(err);
-    if(data) logger.error(data);
+    if(data) logger.debug(data);
   });
 }
 
@@ -55,7 +56,7 @@ function mailPhoto(data) {
   var email = new sendgrid.Email();
   if(!data.recipient) {
     recipient = sendgrid_config.default_recipient;
-    logger.error("no recipient passed. mailing photo to default recipient: " + recipient);
+    logger.warn("no recipient passed. mailing photo to default recipient: " + recipient);
   }
   email.addTo(data.recipient);
   email.setFrom(sendgrid_config.from);
@@ -67,7 +68,7 @@ function mailPhoto(data) {
   });
   sendgrid.send(email, function(err, json) {
     if (err) return logger.error(err);
-    logger.info(json);
+    logger.debug(json);
   });
 }
 
@@ -88,8 +89,8 @@ io.on('connection', function(socket) {
 });
 
 fs.watch(__dirname + '/images/', function(event, name) {
-  if(event) logger.info("event: " + event);
-  if(name) logger.info("name: " + name);
+  if(event) logger.debug("event: " + event);
+  if(name) logger.debug("name: " + name);
   if (name) {
     var filepath = __dirname + '/images/' + name;
   // TODO: uncomment next line on linux machine and delete the line above
