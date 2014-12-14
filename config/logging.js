@@ -12,5 +12,16 @@ var logger = new (winston.Logger)({
     })
   ]
 });
-
+/*
+// for IRC logging, edit this section and remove the block comment
+logger.add(require('winston-irc'), {
+  host: 'your.irc.com',
+  nick: 'imgserve',
+  pass: '',
+  level: 'error',
+  channels: {
+    '#imgserve': true,
+  }
+});
+*/
 module.exports = logger;
