@@ -2,6 +2,7 @@ var logger = require(__dirname + '/config/logging.js');
 logger.info('logging started');
 var express = require('express');
 var app = express();
+app.set('ipaddr', '0.0.0.0');
 app.set('port', process.env.PORT || 8000);
 var io = require('socket.io')(require('http').Server(app));
 var fs = require('fs');
@@ -122,7 +123,7 @@ app.use(express.static('views'));
 app.use('/assets', express.static('assets'));
 app.use('/images', express.static('images'));
 app.use('/bower_components', express.static('bower_components'));
-app.listen(app.get('port'), function() {
-  logger.info("Express server listening on port " + app.get('port'));
+app.listen(app.get('port'), app.get('ipaddr'), function() {
+  logger.info("Express server listening on " + app.get('ipaddr') + ':' + app.get('port'));
 });
 io.listen(3000);

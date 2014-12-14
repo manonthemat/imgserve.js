@@ -7,6 +7,7 @@
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 <script>
   // set socket server address to the currently connected http server on port 3000
+  // this could be commented out in this case, cause we have defined our socket server in the index.html
   var socket = io('http://' + location.hostname + ':3000');
 </script>
 
