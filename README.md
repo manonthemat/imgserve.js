@@ -2,7 +2,7 @@
 
 
 ##Installation
-    git clone https://github.com/manonthemat/imgserve.js.git && cd imgserve.js && mkdir images && mkdir logs && mkdir assets/css && npm install && bower install
+    git clone https://github.com/manonthemat/imgserve.js.git && cd imgserve.js && mkdir logs && mkdir assets/css && npm install && bower install
 
 ##Configuration
 Configure your AWS S3, Sendgrid, Twilio and logging settings in the *config* folder.
