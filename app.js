@@ -48,7 +48,7 @@ function sendText(recipient, message, mediaUrl) {
     mediaUrl: mediaUrl
   }, function(err, data) {
     if(err) logger.error(err);
-    if(data) logger.debug(data);
+    if(data) logger.debug(data, {});
   });
 }
 
@@ -69,7 +69,7 @@ function mailPhoto(data) {
   });
   sendgrid.send(email, function(err, json) {
     if (err) return logger.error(err);
-    logger.debug(json);
+    logger.debug(json, {});
   });
 }
 
