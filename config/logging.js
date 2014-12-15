@@ -14,9 +14,11 @@ var logger = new (winston.Logger)({
 });
 /*
 // for IRC logging, edit this section and remove the block comment
+// nickname preset to local hostname
+var hostname = require('os').hostname().split('.')[0]
 logger.add(require('winston-irc'), {
   host: 'your.irc.com',
-  nick: 'imgserve',
+  nick: hostname,
   pass: '',
   level: 'error',
   channels: {
