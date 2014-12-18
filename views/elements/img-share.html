@@ -41,11 +41,19 @@
       },
       sendMail: function() {
         console.log("mailing photo: " + this.src);
-        socket.emit('mail photo', {filename: this.src, recipient: this.emailAddress});
+        socket.emit('mail photo',
+            {filename: this.src, recipient: this.emailAddress},
+            function(status) {
+              console.log(status);
+            });
       },
       sendMms: function() {
         console.log("text photo: " + this.src);
-        socket.emit('text photo', {filename: this.src, recipient: this.phoneNumber});
+        socket.emit('text photo',
+            {filename: this.src, recipient: this.phoneNumber},
+            function(status) {
+              console.log(status);
+            });
       },
       validEmail: false,
       emailAddressChanged: function(oldVal, newVal) {

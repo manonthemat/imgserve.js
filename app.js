@@ -29,7 +29,7 @@ sass.renderFile({
   },
   error: function(err) {
     logger.error('Error compiling CSS');
-    logger.error(err);
+    logger.error(err, {});
   }
 });
 
@@ -40,19 +40,25 @@ function pushToBucket(data) {
   });
 }
 
-function sendText(recipient, message, mediaUrl) {
+function sendText(recipient, message, mediaUrl, status) {
   twilio_client.sendMessage({
     to: recipient,
     from: twilio_config.number,
     body: message,
     mediaUrl: mediaUrl
   }, function(err, data) {
-    if(err) logger.error(err);
-    if(data) logger.debug(data, {});
+    if(err) {
+      status('failed');
+      logger.error(err, {});
+    }
+    if(data) {
+      status('success');
+      logger.debug(data, {});
+    }
   });
 }
 
-function mailPhoto(data) {
+function mailPhoto(data, status) {
   logger.info('a user is sending a photo via email');
   var email = new sendgrid.Email();
   if(!data.recipient) {
@@ -68,7 +74,11 @@ function mailPhoto(data) {
     path: data.filename
   });
   sendgrid.send(email, function(err, json) {
-    if (err) return logger.error(err);
+    if (err) {
+      status('failed');
+      return logger.error(err, {});
+    }
+    status('success');
     logger.debug(json, {});
   });
 }
@@ -77,10 +87,13 @@ function composeS3Url(local_filename) {
   return "http://s3-" + aws_config.region + ".amazonaws.com/" + aws_config.bucket + "/upload/" + local_filename;
 }
 
-function textPhoto(data) {
+function textPhoto(data, status) {
   logger.info('a user is sending a photo via text message');
   if(!data.recipient) { recipient = twilio_config.default_recipient; }
-  sendText(data.recipient, twilio_config.message, composeS3Url(data.filename));
+  sendText(data.recipient, twilio_config.message, composeS3Url(data.filename), function(fn) {
+    if(fn == 'success') status('success');
+    else if(fn == 'failed') status('failed');
+  });
 }
 
 io.on('connection', function(socket) {
