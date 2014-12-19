@@ -19,11 +19,11 @@
       <paper-dialog style="position: absolute; top: 0;" backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-top">
         <div layout horizontal>
           <input is="core-input" placeholder="enter your email" name="email" value="{{emailAddress}}" type="email" />
-          <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button> <sup hidden?={{!emailSent}}>sent</sup>
+          <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
         </div>
         <div layout horizontal>
           <input is="core-input" placeholder="enter your phone number" name="phone" value="{{phoneNumber}}" type="tel" />
-          <paper-icon-button icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button> <sup hidden?={{!mmsSent}}>sent</sup>
+          <paper-icon-button icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button>
         </div>
       </paper-dialog>
     </div>
@@ -73,8 +73,6 @@
               }
             });
       },
-      emailSent: false,
-      mmsSent: false,
       validEmail: false,
       emailAddressChanged: function(oldVal, newVal) {
         if(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(newVal)) {
