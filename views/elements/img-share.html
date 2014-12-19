@@ -19,17 +19,24 @@
       <paper-dialog style="position: absolute; top: 0;" backdrop heading="{{heading}}" opened?="{{showDialog}}" transition="core-transition-top">
         <div layout horizontal>
           <input is="core-input" placeholder="enter your email" name="email" value="{{emailAddress}}" type="email" />
-          <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button>
+          <paper-icon-button icon="mail" disabled?="{{!validEmail}}" on-tap="{{sendMail}}"></paper-icon-button> <sup hidden?={{!emailSent}}>sent</sup>
         </div>
         <div layout horizontal>
           <input is="core-input" placeholder="enter your phone number" name="phone" value="{{phoneNumber}}" type="tel" />
-          <paper-icon-button icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button>
+          <paper-icon-button icon="notification:mms" disabled?="{{!validPhone}}" on-tap="{{sendMms}}"></paper-icon-button> <sup hidden?={{!mmsSent}}>sent</sup>
         </div>
       </paper-dialog>
     </div>
   </template>
   <script>
   (function() {
+    // I kinda feel dirty about this...
+    function toast(m) {
+      var message = document.createElement('paper-toast');
+      message.text = m;
+      message.opened = true;
+      document.body.appendChild(message);
+    }
     Polymer({
       src: "images/mj.jpg",
       width: "100vw",
@@ -39,7 +46,7 @@
         var d = e.path[2].querySelector('paper-dialog');
         d.toggle();
       },
-      sendMail: function() {
+      sendMail: function sm() {
         console.log("mailing photo: " + this.src);
         socket.emit('mail photo',
             {
@@ -48,19 +55,26 @@
             },
             function(status) {
               console.log(status);
+              if (status == "success") {
+                toast('Email sent');
+              }
             });
       },
       sendMms: function() {
         console.log("text photo: " + this.src);
-        socket.emit('text photo',
+        var success = socket.emit('text photo',
             {
               filename: this.src,
               recipient: this.phoneNumber
             },
             function(status) {
-              console.log(status);
+              if (status == "success") {
+                toast('MMS sent');
+              }
             });
       },
+      emailSent: false,
+      mmsSent: false,
       validEmail: false,
       emailAddressChanged: function(oldVal, newVal) {
         if(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(newVal)) {
