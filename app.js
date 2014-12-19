@@ -47,13 +47,13 @@ function sendText(recipient, message, mediaUrl, status) {
     body: message,
     mediaUrl: mediaUrl
   }, function(err, data) {
-    if(err) {
-      status('failed');
-      logger.error(err, {});
-    }
     if(data) {
-      status('success');
       logger.debug(data, {});
+      status('success');
+    }
+    if(err) {
+      logger.error(err, {});
+      status('failed');
     }
   });
 }
@@ -90,10 +90,7 @@ function composeS3Url(local_filename) {
 function textPhoto(data, status) {
   logger.info('a user is sending a photo via text message');
   if(!data.recipient) { recipient = twilio_config.default_recipient; }
-  sendText(data.recipient, twilio_config.message, composeS3Url(data.filename), function(fn) {
-    if(fn == 'success') status('success');
-    else if(fn == 'failed') status('failed');
-  });
+  sendText(data.recipient, twilio_config.message, composeS3Url(data.filename), status);
 }
 
 io.on('connection', function(socket) {
