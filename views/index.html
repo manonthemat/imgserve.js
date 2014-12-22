@@ -15,8 +15,6 @@
   </head>
   <body fullbleed layout vertical unresolved>
     <section horizontal justified layout id="overlay">
-      <div><!-- empty div for easier layouting --></div>
-      <div><img src="/assets/img/header.png" /></div>
       <x-trigger src="/assets/img/info.png">
         <paper-dropdown class="info">
           <p>To send a photo via email, tap on a photo and enter a valid email address and then hit the <core-icon icon="mail"></core-icon> button to send it.</p>
@@ -24,6 +22,8 @@
           <p>You will see a notification in the left bottom corner of the screen when a new photo comes in. To see that new photo, scroll all the way to the top.</p>
         </paper-dropdown>
       </x-trigger>
+      <div><img src="/assets/img/header.png" /></div>
+      <div><!-- empty div for easier layouting --></div>
     </section>
     <main id="content">
       <img-share></img-share>
