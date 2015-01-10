@@ -6,6 +6,7 @@
 
 ##Configuration
 Configure your AWS S3, Sendgrid, Twilio and logging settings in the *config* folder.
+Usually you might want to use environment variables instead of configuration files, but due to the simplicity of configuration files, I've chosen to use this method instead.
 
 ##Testrun
 In the terminal run
@@ -19,11 +20,10 @@ While keeping the browser open, copy a image into the *images* folder. The image
 ---
 
 ##Known issues
-For this project, I've used Google's Polymer for the first time. There are some styling inconsistencies at the moment. Polymer is still in dev preview and [not all browsers support polyfill natively yet](https://www.polymer-project.org/resources/compatibility.html). As a result, my custom element img-share, which embeds a paper-toast has a wrong background color, due to leaked CSS. This is a known issue of the current version. Feel free to style that element to your liking explicitly.
+For this project, I've used Google's Polymer for the first time. There are some styling inconsistencies at the moment. Polymer is still in dev preview and [not all browsers support polyfill natively yet](https://www.polymer-project.org/resources/compatibility.html). As a result, my custom element img-share, which embeds a paper-toast has a wrong background color in the Safari browser (and possibly others), due to leaked CSS. This is a known issue of the current version. Feel free to style that element to your liking explicitly.
 
 ###ToDo
 ####img-share
-- visual feedback when a photo is successfully shared via email or mms
 - email input should be nulled after successfully shared photo via email
 - phone number input should be nulled after successfully shared photo via email
 - tap on paper-toast should scroll to the new photo
@@ -34,6 +34,3 @@ For this project, I've used Google's Polymer for the first time. There are some 
 ####index.html
 - fade-in animation of incoming photo
 - fade-out of deleted photo
-
-####styles.scss
-- visual improvements for info class
